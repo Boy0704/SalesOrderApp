@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/menu_transaksi"
+        android:icon="@drawable/ic_transaction"
+        android:title="List SO"/>
+
+<!--    <item-->
+<!--        android:id="@+id/menu_notifikasi"-->
+<!--        android:icon="@drawable/ic_notification"-->
+<!--        android:title="List Sewa"/>-->
+
+    <item
+        android:id="@+id/menu_profil"
+        android:icon="@drawable/ic_user"
+        android:title="Profil"/>
+
+
+</menu>
