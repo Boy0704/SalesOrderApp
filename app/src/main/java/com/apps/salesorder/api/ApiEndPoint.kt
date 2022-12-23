@@ -28,6 +28,7 @@ interface ApiEndPoint {
     @GET("api/so/download_master_data/debtor")
     suspend fun dataDebtor(
         @Header("Authorization") authorization : String,
+        @Query("SalesAgent") salesAgent: String
     ): Response<DebtorResp>
 
     @GET("api/so/download_master_data/item")
@@ -45,7 +46,7 @@ interface ApiEndPoint {
         @Header("Authorization") authorization : String,
     ): Response<ItemPriceResp>
 
-    @GET("api/so/download_master_data/tax")
+    @GET("api/so/download_master_data/taxType")
     suspend fun dataTax(
         @Header("Authorization") authorization : String,
     ): Response<TaxResp>

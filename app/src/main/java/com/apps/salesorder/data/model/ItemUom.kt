@@ -13,7 +13,8 @@ data class ItemUom(
     @ColumnInfo(name = "ItemCode") var itemCode: String = "",
     @ColumnInfo(name = "UOM") var UOM: String? = "",
     @ColumnInfo(name = "Rate") var rate: String? = "",
-    @ColumnInfo(name = "Price") var price: String? = ""
+    @ColumnInfo(name = "Price") var price: String? = "",
+    @ColumnInfo(name = "BarCode") var barCode: String? = ""
 ) :Parcelable{
 
 }

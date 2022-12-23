@@ -102,10 +102,15 @@ class SoListAdapter(
         }
 
         holder.binding.btnCetak.setOnClickListener {
-            val pdfConverter = PDFConverter()
-            val listItemsSoDetail = arrayListOf<SoDetail>()
-            listItemsSoDetail.addAll(SoDetailDao.getBySoNo(list.soNo.toString()))
-            pdfConverter.createPdf(context, list, listItemsSoDetail, activity)
+            if(list.status.equals("draft")){
+                Toasty.warning(context, "silahkan submit SO dahulu !", Toast.LENGTH_SHORT).show()
+            } else {
+                val pdfConverter = PDFConverter()
+                val listItemsSoDetail = arrayListOf<SoDetail>()
+                listItemsSoDetail.addAll(SoDetailDao.getBySoNo(list.soNo.toString()))
+                pdfConverter.createPdf(context, list, listItemsSoDetail, activity)
+            }
+
         }
         holder.binding.btnShare.visibility = View.GONE
         holder.binding.btnShare.setOnClickListener {

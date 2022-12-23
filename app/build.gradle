@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
+    id 'kotlin-parcelize'
     id "androidx.navigation.safeargs"
 }
 
@@ -101,7 +101,5 @@ dependencies {
 
     implementation 'com.github.tapadoo:alerter:7.2.4'
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
-    //implementation 'com.github.Gkemon:Android-XML-to-PDF-Generator:2.6.8'
-
 
 }

@@ -10,9 +10,9 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Branch(
     @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "id") var id: Int = 0,
-    @ColumnInfo(name = "AccNo") var accNo: String = "",
-    @ColumnInfo(name = "BranchCode") var branchCode: String = "",
-    @ColumnInfo(name = "BranchName") var branchName: String = ""
+    @ColumnInfo(name = "AccNo") var accNo: String? = "",
+    @ColumnInfo(name = "BranchCode") var branchCode: String? = "",
+    @ColumnInfo(name = "BranchName") var branchName: String? = ""
 ) :Parcelable{
 
 }

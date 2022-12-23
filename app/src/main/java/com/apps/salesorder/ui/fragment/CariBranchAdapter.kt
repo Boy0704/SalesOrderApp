@@ -59,7 +59,7 @@ class CariBranchAdapter(
                 } else {
                     val dataFiltered = ArrayList<Branch>()
                     for (datas in listData) {
-                        if ( datas.branchCode.toLowerCase().contains(charSearch.toLowerCase()) ) {
+                        if ( datas.branchCode!!.toLowerCase().contains(charSearch.toLowerCase()) ) {
                             dataFiltered.add(datas)
                         }
                     }

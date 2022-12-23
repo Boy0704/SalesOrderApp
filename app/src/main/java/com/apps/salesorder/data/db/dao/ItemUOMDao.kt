@@ -22,6 +22,9 @@ interface ItemUOMDao {
     @Query("SELECT * FROM item_uom WHERE ItemCode = :itemCode")
     fun getByItemCode(itemCode: String) : List<ItemUom>
 
+    @Query("SELECT * FROM item_uom WHERE BarCode = :barCode")
+    fun getByBarCode(barCode: String) : List<ItemUom>
+
     @Query("DELETE FROM item_uom")
     fun deleteAll()
 

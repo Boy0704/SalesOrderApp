@@ -59,13 +59,14 @@ class AddDetailActivity : AppCompatActivity() {
         accNo = intent.getStringExtra("acc_no").toString()
 
         if (!codeBarcode.equals("null")){
-            val dataItem = ItemDao.getAll(codeBarcode)
-            if (dataItem.size > 0) {
-                itemCode = codeBarcode
-                binding.itemCode.setText(codeBarcode)
+            val byBarcode = ItemUOMDao.getByBarCode(codeBarcode)
+            if (byBarcode.size > 0) {
+                val dataItem = ItemDao.getAll(byBarcode.get(0).itemCode)
+                itemCode = dataItem.get(0).itemCode.toString()
+                binding.itemCode.setText(dataItem.get(0).itemCode.toString())
                 binding.itemDesc.setText(dataItem.get(0).desc.toString())
             } else {
-                Toasty.warning(this, "Item Code $codeBarcode tidak ditemukan !", Toast.LENGTH_SHORT).show()
+                Toasty.warning(this, "BarCode $codeBarcode tidak ditemukan !", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -81,6 +82,8 @@ class AddDetailActivity : AppCompatActivity() {
         }
         binding.scanCode.setOnClickListener {
             val intent = Intent(this, ScannerViewActivity::class.java)
+            intent.putExtra("so_no", soNo)
+            intent.putExtra("acc_no", accNo)
             finish()
             startActivity(intent)
         }
@@ -112,9 +115,9 @@ class AddDetailActivity : AppCompatActivity() {
 
             val getDebtor = DebtorDao.getByAccNo(accNo)
             val subtotal = ( qty.toInt() * unitPrice ) - discount
-            val ppn_code = getDebtor.get(0).taxType.toString()
-            val ppn_rate = TaxDao.getAll(ppn_code).get(0).taxRate.toString()
-            val ppn_amount = ppn_rate.toDouble().toInt() * subtotal / 100
+            val ppn_code = if(getDebtor.get(0).taxType.isNullOrEmpty()) "-" else getDebtor.get(0).taxType.toString()
+            val ppn_rate = if(getDebtor.get(0).taxType.isNullOrEmpty()) "0" else TaxDao.getAll(ppn_code).get(0).taxRate.toString()
+            val ppn_amount = if(getDebtor.get(0).taxType.isNullOrEmpty()) 0.0 else ppn_rate.toDouble().toInt() * subtotal / 100
 
 
             SoDetailDao.insert(
@@ -129,7 +132,7 @@ class AddDetailActivity : AppCompatActivity() {
                     ppnCode = ppn_code,
                     ppnRate = ppn_rate.toDouble().toInt(),
                     ppnAmount = ppn_amount,
-                    projNo = ""
+                    projNo = "-"
                 )
             )
 
@@ -179,7 +182,7 @@ class AddDetailActivity : AppCompatActivity() {
 
     fun setDataFromDialogCariUOM(result: ItemUom){
         satuanUOM = result.UOM.toString()
-        itemUomPrice = result.price!!.toString().toDouble()
+        itemUomPrice = if(result.price.isNullOrEmpty()) 0.0 else result.price!!.toString().toDouble()
         binding.satuanUom.setText("${result.UOM.toString()}")
     }
 

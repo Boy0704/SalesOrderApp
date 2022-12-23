@@ -58,7 +58,7 @@ class CariCompCodeAdapter(
                 } else {
                     val dataFiltered = ArrayList<Debtor>()
                     for (datas in listData) {
-                        if ( datas.accNo.toLowerCase().contains(charSearch.toLowerCase()) ) {
+                        if ( datas.accNo.toLowerCase().contains(charSearch.toLowerCase()) or datas.companyName!!.toLowerCase().contains(charSearch.toLowerCase()) ) {
                             dataFiltered.add(datas)
                         }
                     }

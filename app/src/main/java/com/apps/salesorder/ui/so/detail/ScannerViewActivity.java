@@ -28,6 +28,7 @@ public class ScannerViewActivity extends AppCompatActivity implements ZXingScann
 
     private ZXingScannerView scannerView;
     int currentApiVersion = Build.VERSION.SDK_INT;
+    String accNo,soNo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,13 @@ public class ScannerViewActivity extends AppCompatActivity implements ZXingScann
         //getSupportActionBar().setHomeButtonEnabled(true); //for back button
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);//for back button
         //getSupportActionBar().setTitle("QR or Barcode Scanner");
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            soNo = extras.getString("so_no");
+            accNo = extras.getString("acc_no");
+            //The key argument here must match that used in the other activity
+        }
 
         if (currentApiVersion >= Build.VERSION_CODES.M) {
             requestCameraPermission();
@@ -78,6 +86,8 @@ public class ScannerViewActivity extends AppCompatActivity implements ZXingScann
 
         Intent intent = new Intent(ScannerViewActivity.this, AddDetailActivity.class);
         intent.putExtra("code_barcode", myResult);
+        intent.putExtra("so_no", soNo);
+        intent.putExtra("acc_no", accNo);
         finish();
         startActivity(intent);
 

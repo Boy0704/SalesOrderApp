@@ -70,9 +70,9 @@ class HomeViewModel (
         }
     }
 
-    fun getDebtor(token: String) = viewModelScope.launch {
+    fun getDebtor(token: String, salesAgent: String) = viewModelScope.launch {
         debtorResp.value = Resource.Loading()
-        val dataApi = api.dataDebtor(authorization = token)
+        val dataApi = api.dataDebtor(authorization = token, salesAgent = salesAgent)
         try {
             if (dataApi.code() == 401) {
                 debtorResp.value = Resource.Error("Token Unauthorized atau akun sedang tidak aktif!")

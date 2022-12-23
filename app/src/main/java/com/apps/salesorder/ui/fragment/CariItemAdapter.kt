@@ -60,7 +60,7 @@ class CariItemAdapter(
                 } else {
                     val dataFiltered = ArrayList<Item>()
                     for (datas in listData) {
-                        if ( datas.itemCode.toLowerCase().contains(charSearch.toLowerCase()) ) {
+                        if ( datas.itemCode.toLowerCase().contains(charSearch.toLowerCase()) or datas.desc!!.toLowerCase().contains(charSearch.toLowerCase()) ) {
                             dataFiltered.add(datas)
                         }
                     }

@@ -28,7 +28,6 @@ import com.apps.salesorder.ui.so.detail.AddDetailActivity
 import com.apps.salesorder.ui.so.detail.OrderDetailActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.item_list_so.*
 import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -112,10 +111,10 @@ class SoHeaderActivity : AppCompatActivity() {
             delivery4 = binding.delivery4.text.toString()
             refdoc = binding.refDocNo.text.toString()
 
-            if(branch.isEmpty()){
-                Toasty.warning(this, "Branch tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            } else if(refdoc.isEmpty()){
-                Toasty.warning(this, "Ref Doc No tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            if(accNo.isEmpty()){
+                Toasty.warning(this, "Company Code tidak boleh kosong", Toast.LENGTH_SHORT).show()
+//            } else if(refdoc.isEmpty()){
+//                Toasty.warning(this, "Ref Doc No tidak boleh kosong", Toast.LENGTH_SHORT).show()
             } else {
                 SoHeaderDao.insert(
                     SoHeader(
@@ -136,6 +135,7 @@ class SoHeaderActivity : AppCompatActivity() {
                 val intent = Intent(this, OrderDetailActivity::class.java)
                 intent.putExtra("so_no", soNo)
                 intent.putExtra("acc_no", accNo)
+                finish()
                 startActivity(intent)
             }
 
@@ -238,7 +238,7 @@ class SoHeaderActivity : AppCompatActivity() {
 
     fun setDataFromDialogCariBranch(result: Branch){
         binding.branch.setText(result.branchName)
-        branch = result.branchCode
+        branch = result.branchCode!!
     }
 
 }

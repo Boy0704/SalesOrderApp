@@ -234,6 +234,7 @@
                         android:text="Branch"/>
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/red_crimson"
@@ -366,6 +367,7 @@
                         android:text="Ref Doc No"/>
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/red_crimson"

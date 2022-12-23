@@ -78,7 +78,7 @@ class OrderDetailActivity : AppCompatActivity() {
 
 
         currencyCode = DebtorDao.getByAccNo(accNo).get(0).currencyCode.toString()
-        rate = CurrencyDao.getByCurrencyCode(currencyCode).get(0).bankSellRate
+        rate = CurrencyDao.getByCurrencyCode(currencyCode).get(0).bankSellRate!!
 
 
         listItems.forEach({

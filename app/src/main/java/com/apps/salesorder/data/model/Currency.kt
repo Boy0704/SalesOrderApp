@@ -10,8 +10,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Currency(
     @PrimaryKey(autoGenerate = false)@ColumnInfo(name = "CurrencyCode") var currencyCode: String = "",
-    @ColumnInfo(name = "CurrencyWord") var currencyWord: String = "",
-    @ColumnInfo(name = "BankSellRate") var bankSellRate: String = ""
+    @ColumnInfo(name = "CurrencyWord") var currencyWord: String? = "",
+    @ColumnInfo(name = "BankSellRate") var bankSellRate: String? = ""
 ) :Parcelable{
 
 }

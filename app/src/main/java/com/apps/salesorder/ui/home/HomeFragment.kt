@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
         binding.fullSync.setOnClickListener {
             checkNetwork()
             //LoadingScreen.displayLoadingWithText(requireActivity(),"Silahkan Tunggu, Sedang mendownload data..",true)
-            LoadingScreen.displayLoadingWithText(requireActivity(), "Sedang Download Data..", false)
+            LoadingScreen.displayLoadingWithText(requireActivity(), "Sedang Download Data..", true)
             downloadData()
         }
         binding.partialSync.setOnClickListener {
@@ -117,15 +117,54 @@ class HomeFragment : Fragment() {
 
     private fun downloadData(){
         val token = pref.getString(Constants.DEFAULT.TOKEN)
+        val SalesAgent = pref.getString(Constants.DEFAULT.USERNAME)
+        viewModel.getItemPrice(token.toString())
+        viewModel.getTax(token.toString())
         viewModel.getBranch(token.toString())
-        viewModel.getDebtor(token.toString())
+        viewModel.getDebtor(token.toString(), SalesAgent.toString())
         viewModel.getCurrency(token.toString())
         viewModel.getItem(token.toString())
         viewModel.getItemUOM(token.toString())
-        viewModel.getItemPrice(token.toString())
-        viewModel.getTax(token.toString())
 
 
+
+        viewModel.itemPriceResp.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Resource.Loading -> {
+                    setNotif("download data ITEM Price...")
+                }
+                is Resource.Success -> {
+                    Timber.e("TAG DOWNLOAD TABLE : ${it.data!!.data.table}")
+                    ItemPriceDao.deleteAll()
+                    var total = 1;
+                    while (total <= it.data.data.total_data ){
+                        var i = total - 1;
+                        ItemPriceDao.insert(
+                            ItemPrice(
+                                itemCode = it.data.data.master_data[i].ItemCode,
+                                UOM = it.data.data.master_data[i].UOM,
+                                itemPriceKey = it.data.data.master_data[i].ItemPriceKey,
+                                priceCategory = it.data.data.master_data[i].PriceCategory,
+                                accNo = it.data.data.master_data[i].AccNo as String,
+                                fixedPrice = it.data.data.master_data[i].FixedPrice.toDouble(),
+                                fixedDetailDiscount = if(it.data.data.master_data[i].FixedDetailDiscount.isNullOrBlank()) 0.0 else it.data.data.master_data[i].FixedDetailDiscount.toDouble(),
+
+                                )
+                        )
+                        total++;
+                        setNotif("download data ${it.data.data.table} : $total dari ${it.data.data.total_data} ")
+                    }
+
+                    setNotif("Done download : ${it.data.data.table}")
+                    totalSync++;
+                    checkIsLimitSync(totalSync)
+                }
+                is Resource.Error -> {
+                    setNotif(it.message.toString())
+                    Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
         viewModel.debtorResp.observe(viewLifecycleOwner, Observer {
             when(it) {
@@ -291,45 +330,8 @@ class HomeFragment : Fragment() {
                                 itemCode = it.data.data.master_data[i].ItemCode,
                                 UOM = it.data.data.master_data[i].UOM,
                                 rate = it.data.data.master_data[i].Rate,
-                                price = it.data.data.master_data[i].Price as String
-
-                            )
-                        )
-                        total++;
-                        setNotif("download data ${it.data.data.table} : $total dari ${it.data.data.total_data} ")
-                    }
-
-                    setNotif("Done download : ${it.data.data.table}")
-                    totalSync++;
-                    checkIsLimitSync(totalSync)
-                }
-                is Resource.Error -> {
-                    setNotif(it.message.toString())
-                    Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
-        viewModel.itemPriceResp.observe(viewLifecycleOwner, Observer {
-            when(it) {
-                is Resource.Loading -> {
-                    setNotif("download data ITEM Price...")
-                }
-                is Resource.Success -> {
-                    Timber.e("TAG DOWNLOAD TABLE : ${it.data!!.data.table}")
-                    ItemPriceDao.deleteAll()
-                    var total = 1;
-                    while (total <= it.data.data.total_data ){
-                        var i = total - 1;
-                        ItemPriceDao.insert(
-                            ItemPrice(
-                                itemCode = it.data.data.master_data[i].ItemCode,
-                                UOM = it.data.data.master_data[i].UOM,
-                                itemPriceKey = it.data.data.master_data[i].ItemPriceKey,
-                                priceCategory = it.data.data.master_data[i].PriceCategory,
-                                accNo = it.data.data.master_data[i].AccNo as String,
-                                fixedPrice = it.data.data.master_data[i].FixedPrice.toDouble(),
-                                fixedDetailDiscount = it.data.data.master_data[i].FixedDetailDiscount.toDouble(),
+                                price = it.data.data.master_data[i].Price as String,
+                                barCode = it.data.data.master_data[i].BarCode as String
 
                             )
                         )
@@ -385,6 +387,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkIsLimitSync(value: Int){
+        Timber.e("TOTAL SYNC : $value")
         if (value.equals(limitSync)){
             setNotif("Sukses Melakukan Full Sync")
             LoadingScreen.hideLoading()
