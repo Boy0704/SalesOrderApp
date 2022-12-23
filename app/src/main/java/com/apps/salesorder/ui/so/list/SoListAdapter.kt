@@ -27,6 +27,7 @@ import com.apps.salesorder.databinding.ItemListSoBinding
 import com.apps.salesorder.helper.Utils
 import com.apps.salesorder.ui.so.detail.OrderDetailActivity
 import com.apps.salesorder.ui.so.pdf.PDFConverter
+import com.apps.salesorder.ui.so.pdf.XmlToPDFConverter
 import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
 import timber.log.Timber
@@ -105,10 +106,12 @@ class SoListAdapter(
             if(list.status.equals("draft")){
                 Toasty.warning(context, "silahkan submit SO dahulu !", Toast.LENGTH_SHORT).show()
             } else {
-                val pdfConverter = PDFConverter()
+                //val pdfConverter = PDFConverter()
+                val xmlToPDFConverter = XmlToPDFConverter()
                 val listItemsSoDetail = arrayListOf<SoDetail>()
                 listItemsSoDetail.addAll(SoDetailDao.getBySoNo(list.soNo.toString()))
-                pdfConverter.createPdf(context, list, listItemsSoDetail, activity)
+                //pdfConverter.createPdf(context, list, listItemsSoDetail, activity)
+                xmlToPDFConverter.createPdf(context, list, listItemsSoDetail)
             }
 
         }
