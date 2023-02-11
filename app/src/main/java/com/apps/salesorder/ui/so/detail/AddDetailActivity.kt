@@ -63,8 +63,10 @@ class AddDetailActivity : AppCompatActivity() {
             if (byBarcode.size > 0) {
                 val dataItem = ItemDao.getAll(byBarcode.get(0).itemCode)
                 itemCode = dataItem.get(0).itemCode.toString()
+                satuanUOM = byBarcode.get(0).UOM.toString()
                 binding.itemCode.setText(dataItem.get(0).itemCode.toString())
                 binding.itemDesc.setText(dataItem.get(0).desc.toString())
+                binding.satuanUom.setText(satuanUOM)
             } else {
                 Toasty.warning(this, "BarCode $codeBarcode tidak ditemukan !", Toast.LENGTH_SHORT).show()
             }
@@ -74,6 +76,9 @@ class AddDetailActivity : AppCompatActivity() {
     }
 
     private fun setuplistener() {
+        binding.icBack.setOnClickListener {
+            finish()
+        }
         binding.itemCode.setOnClickListener {
             showDialogCariItem()
         }

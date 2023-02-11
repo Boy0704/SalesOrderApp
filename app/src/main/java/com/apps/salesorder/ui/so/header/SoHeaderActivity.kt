@@ -62,6 +62,9 @@ class SoHeaderActivity : AppCompatActivity() {
 
         setviewModel()
         setupListener()
+        binding.icBack.setOnClickListener {
+            finish()
+        }
 
     }
 

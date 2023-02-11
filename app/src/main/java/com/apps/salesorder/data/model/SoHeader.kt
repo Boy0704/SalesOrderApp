@@ -32,7 +32,8 @@ data class SoHeader(
     @ColumnInfo(name = "created_at") var createdAt: String? = "",
     @ColumnInfo(name = "created_by") var createdBy: String? = "",
     @ColumnInfo(name = "updated_at") var updatedAt: String? = "",
-    @ColumnInfo(name = "updated_by") var updatedBy: String? = ""
+    @ColumnInfo(name = "updated_by") var updatedBy: String? = "",
+    @ColumnInfo(name = "checked") var checked: String? = ""
 ) :Parcelable{
 
 }

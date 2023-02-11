@@ -103,11 +103,15 @@ class OrderDetailActivity : AppCompatActivity() {
     }
 
     private fun setuplisten() {
+        binding.icBack.setOnClickListener {
+            finish()
+        }
         binding.addDetail.setOnClickListener {
             val intent = Intent(this, AddDetailActivity::class.java)
             intent.putExtra("so_no", soNo)
             intent.putExtra("acc_no", accNo)
             startActivity(intent)
+            finish()
         }
         binding.submit.setOnClickListener {
             submit()

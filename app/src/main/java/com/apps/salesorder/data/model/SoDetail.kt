@@ -20,7 +20,8 @@ data class SoDetail(
     @ColumnInfo(name = "ppn_code") var ppnCode: String? = "",
     @ColumnInfo(name = "ppn_rate") var ppnRate: Int? = 0,
     @ColumnInfo(name = "ppn_amount") var ppnAmount: Double? = 0.0,
-    @ColumnInfo(name = "proj_no") var projNo: String? = ""
+    @ColumnInfo(name = "proj_no") var projNo: String? = "",
+    @ColumnInfo(name = "checked") var checked: String? = ""
 ) :Parcelable{
 
 }

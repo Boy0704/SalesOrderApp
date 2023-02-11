@@ -20,8 +20,12 @@ import com.apps.salesorder.data.preferences.Preferences
 import com.apps.salesorder.databinding.FragmentHomeBinding
 import com.apps.salesorder.helper.LoadingScreen
 import com.apps.salesorder.ui.so.header.SoHeaderActivity
+import com.apps.salesorder.ui.sync.PartialSyncActivity
+import com.apps.salesorder.ui.sync.SyncSoActivity
+import com.tapadoo.alerter.Alerter
 import com.wessam.library.NetworkChecker
 import com.wessam.library.NoInternetLayout
+import es.dmoral.toasty.Toasty
 import timber.log.Timber
 
 
@@ -40,6 +44,8 @@ class HomeFragment : Fragment() {
     private lateinit var ItemDao: ItemDao
     private lateinit var ItemUOMDao: ItemUOMDao
     private lateinit var ItemPriceDao: ItemPriceDao
+    private lateinit var SoHeaderDao: SoHeaderDao
+    private lateinit var SoDetailDao: SoDetailDao
     private lateinit var TaxDao: TaxDao
     private var totalSync: Int = 0
     private var limitSync: Int = 7
@@ -67,6 +73,8 @@ class HomeFragment : Fragment() {
         ItemUOMDao = database.getItemUOMDao()
         ItemPriceDao = database.getItemPriceDao()
         TaxDao = database.getTaxDao()
+        SoHeaderDao = database.getSoHeader()
+        SoDetailDao = database.getSoDetail()
 
         viewModelFactory = HomeViewModelFactory( api, requireActivity() )
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
@@ -74,16 +82,33 @@ class HomeFragment : Fragment() {
 
         infoFullSync()
         binding.fullSync.setOnClickListener {
-            checkNetwork()
-            //LoadingScreen.displayLoadingWithText(requireActivity(),"Silahkan Tunggu, Sedang mendownload data..",true)
-            LoadingScreen.displayLoadingWithText(requireActivity(), "Sedang Download Data..", true)
-            downloadData()
+
+            Alerter.create(requireActivity())
+                .setDuration(60*1000)
+                .setTitle("Alert")
+                .setText("Full sync akan menghapus semua data, pastikan semua data transaksi sudah di singkronkan !")
+                .addButton("Lanjut", R.style.AlertButton, View.OnClickListener {
+                    Alerter.hide()
+                    checkNetwork()
+                    //LoadingScreen.displayLoadingWithText(requireActivity(),"Silahkan Tunggu, Sedang mendownload data..",true)
+                    LoadingScreen.displayLoadingWithText(requireActivity(), "Sedang Download Data..", true)
+                    downloadData()
+
+                })
+                .addButton("Batal", R.style.AlertButton, View.OnClickListener {
+                    Alerter.hide()
+                    Toasty.info(requireContext(), "Full Sync di batalkan !", Toast.LENGTH_SHORT).show()
+                })
+                .show()
+
         }
         binding.partialSync.setOnClickListener {
-            infoFullSync()
+            val intent = Intent(requireActivity(), PartialSyncActivity::class.java)
+            startActivity(intent)
         }
         binding.transSync.setOnClickListener {
-            Toast.makeText(requireActivity(), "Tidak ada transaksi untuk di syncron !", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireActivity(), SyncSoActivity::class.java)
+            startActivity(intent)
         }
         binding.newSo.setOnClickListener {
             val intent = Intent(requireActivity(), SoHeaderActivity::class.java)
@@ -116,6 +141,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun downloadData(){
+
+        SoHeaderDao.deleteAll()
+        SoDetailDao.deleteAll()
+
         val token = pref.getString(Constants.DEFAULT.TOKEN)
         val SalesAgent = pref.getString(Constants.DEFAULT.USERNAME)
         viewModel.getItemPrice(token.toString())
@@ -123,7 +152,7 @@ class HomeFragment : Fragment() {
         viewModel.getBranch(token.toString())
         viewModel.getDebtor(token.toString(), SalesAgent.toString())
         viewModel.getCurrency(token.toString())
-        viewModel.getItem(token.toString())
+        viewModel.getItem(token.toString(), SalesAgent.toString())
         viewModel.getItemUOM(token.toString())
 
 

@@ -15,6 +15,12 @@ interface ApiEndPoint {
         @Field("password") password: String?,
     ): Response<LoginResp>
 
+    @FormUrlEncoded
+    @POST("api/so/so_sync")
+    suspend fun syncSo(
+        @Field("so_request") jsonData: String?,
+    ): Response<SyncSoResp>
+
     @GET("api/so/download_master_data/branch")
     suspend fun dataBranch(
         @Header("Authorization") authorization : String,
@@ -34,6 +40,7 @@ interface ApiEndPoint {
     @GET("api/so/download_master_data/item")
     suspend fun dataItem(
         @Header("Authorization") authorization : String,
+        @Query("SalesAgent") salesAgent: String
     ): Response<ItemResp>
 
     @GET("api/so/download_master_data/itemUom")

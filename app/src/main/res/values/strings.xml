@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SalesOrderApp</string>
+    <string name="app_name">Sales Kanvas</string>
     <string name="str_salah_password">Username dan password anda salah</string>
     <string name="error_server">Kesalahan Server</string>
     <string name="str_btn_login">Masuk</string>

@@ -69,7 +69,7 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginBottom="12dp"
-                android:text="SO Header"
+                android:text="Sales Header"
                 android:fontFamily="@font/poppins_semibold"
                 android:textSize="20sp"/>
 
@@ -159,7 +159,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="SO No"
+                    android:text="Sales No"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="1"/>
@@ -228,7 +228,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
                 android:background="@drawable/shape_ractangle_rounded_5_primary"
-                android:text="+ Tambah"
+                android:text="+ Tambah Detail"
                 android:textColor="@color/white"
                 android:fontFamily="@font/roboto"
                 android:textAllCaps="false"/>

@@ -23,6 +23,31 @@ class HomeViewModel (
     val itemPriceResp: MutableLiveData<Resource<ItemPriceResp>> = MutableLiveData()
     val taxResp: MutableLiveData<Resource<TaxResp>> = MutableLiveData()
 
+    val syncSoResp: MutableLiveData<Resource<SyncSoResp>> = MutableLiveData()
+
+    fun soSyncProses(soJson: String) = viewModelScope.launch {
+        syncSoResp.value = Resource.Loading()
+        val dataApi = api.syncSo(jsonData = soJson)
+        try {
+            if (dataApi.code() == 401) {
+                syncSoResp.value = Resource.Error("Token Unauthorized atau akun sedang tidak aktif!")
+            } else {
+                if (dataApi.body()!!.error.equals("true")) {
+                    syncSoResp.value = Resource.Success( dataApi.body()!! )
+                } else {
+                    syncSoResp.value = Resource.Error( dataApi.body()?.message.toString() )
+                }
+            }
+
+        } catch (e: Exception) {
+            if(dataApi.code() == 500) {
+                syncSoResp.value = Resource.Error(context.getString(R.string.error_server))
+            } else {
+                syncSoResp.value = Resource.Error( e.message.toString() )
+            }
+        }
+    }
+
 
     fun getBranch(token: String) = viewModelScope.launch {
         branchResp.value = Resource.Loading()
@@ -93,9 +118,9 @@ class HomeViewModel (
         }
     }
 
-    fun getItem(token: String) = viewModelScope.launch {
+    fun getItem(token: String, salesAgent: String) = viewModelScope.launch {
         itemResp.value = Resource.Loading()
-        val dataApi = api.dataItem(authorization = token)
+        val dataApi = api.dataItem(authorization = token, salesAgent = salesAgent)
         try {
             if (dataApi.code() == 401) {
                 itemResp.value = Resource.Error("Token Unauthorized atau akun sedang tidak aktif!")

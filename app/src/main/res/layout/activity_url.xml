@@ -28,7 +28,7 @@
         android:layout_marginEnd="24dp"
         android:ems="10"
         android:gravity="top|start"
-        android:hint="http://192.168.1.100:8080/webservice"
+        android:hint="http://192.168.1.100:8080/webservice_so/"
         android:inputType="textMultiLine"
         android:lines="8"
         android:maxLines="10"

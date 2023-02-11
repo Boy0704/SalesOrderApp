@@ -26,6 +26,7 @@ class Preferences(context: Context) {
 
     fun remove(key: String){
         editor.remove(key)
+        editor.commit()
     }
 
     fun getString(key: String): String? {

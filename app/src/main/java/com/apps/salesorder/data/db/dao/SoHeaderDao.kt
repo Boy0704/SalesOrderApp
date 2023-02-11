@@ -27,6 +27,12 @@ interface SoHeaderDao {
                      status: String
     )
 
+    @Query("UPDATE so_header SET checked=:checked WHERE so_no = :soNo")
+    fun updateCheckedHeader(checked: String,soNo: String)
+
+    @Query("UPDATE so_header SET checked=:value, status=:value WHERE checked = :checked")
+    fun updateCheckedHeaderAll(checked: String,value: String)
+
     @Query("SELECT * FROM so_header")
     fun getAll() : List<SoHeader>
 
@@ -35,6 +41,12 @@ interface SoHeaderDao {
 
     @Query("SELECT * FROM so_header WHERE so_no = :soNo")
     fun getBySoNo(soNo: String) : List<SoHeader>
+
+    @Query("SELECT * FROM so_header WHERE checked = :checked")
+    fun getByChecked(checked: String) : List<SoHeader>
+
+    @Query("SELECT * FROM so_header WHERE checked != :checked")
+    fun getNotSync(checked: String) : List<SoHeader>
 
     @Query("DELETE FROM so_header")
     fun deleteAll()

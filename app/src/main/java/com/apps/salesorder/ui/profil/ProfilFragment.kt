@@ -42,6 +42,7 @@ class ProfilFragment : Fragment() {
             pref.remove(Constants.DEFAULT.USERNAME)
             pref.remove(Constants.DEFAULT.NAMA)
             pref.remove(Constants.DEFAULT.LAST_LOGIN)
+            pref.remove(Constants.DEFAULT.TOKEN)
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()
