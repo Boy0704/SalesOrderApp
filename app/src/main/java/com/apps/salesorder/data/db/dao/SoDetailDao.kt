@@ -15,6 +15,9 @@ interface SoDetailDao {
     @Delete
     fun delete(sd: SoDetail)
 
+    @Query("UPDATE so_detail SET checked=:checked")
+    fun updateCheckedAll(checked: String)
+
     @Query("UPDATE so_detail SET checked=:checked WHERE so_no = :soNo")
     fun updateCheckedDetail(checked: String,soNo: String)
 

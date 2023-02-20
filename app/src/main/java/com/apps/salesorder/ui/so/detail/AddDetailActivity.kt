@@ -67,6 +67,7 @@ class AddDetailActivity : AppCompatActivity() {
                 binding.itemCode.setText(dataItem.get(0).itemCode.toString())
                 binding.itemDesc.setText(dataItem.get(0).desc.toString())
                 binding.satuanUom.setText(satuanUOM)
+                binding.qty.setText("1")
             } else {
                 Toasty.warning(this, "BarCode $codeBarcode tidak ditemukan !", Toast.LENGTH_SHORT).show()
             }

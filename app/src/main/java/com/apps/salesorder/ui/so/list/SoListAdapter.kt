@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,14 +66,16 @@ class SoListAdapter(
 
         val list = dataFilter[position]
 
-        holder.binding.soNo.text = list.soNo
+
         holder.binding.companyName.text = list.companyName
         holder.binding.tanggal.text = list.date
         holder.binding.status.text = list.status
         if (list.status.equals("draft")){
             holder.binding.status.setTextColor(Color.RED)
+            holder.binding.soNo.text = Html.fromHtml(list.soNo + " | <font color='#c60101'>" + list.status + "</font> | <font color='#4778e9'>" + SoDetailDao.getBySoNo(list.soNo.toString()).size.toString() + " - Item</font>" )
         } else {
             holder.binding.status.setTextColor(Color.GREEN)
+            holder.binding.soNo.text = Html.fromHtml(list.soNo + " | <font color='#19E59E'>" + list.status + "</font> | <font color='#4778e9'>" + SoDetailDao.getBySoNo(list.soNo.toString()).size.toString() + " - Item</font>" )
         }
         holder.binding.ppn.text = Utils.NUMBER.currencyFormat(if (list.ppn?.isEmpty() == true) "0" else list.ppn.toString())
         holder.binding.subtotal.text = Utils.NUMBER.currencyFormat(if (list.subTotal?.isEmpty() == true) "0" else list.subTotal.toString())

@@ -71,6 +71,7 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:id="@+id/check1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -80,6 +81,7 @@
                 android:text="Data Branch" />
 
             <CheckBox
+                android:id="@+id/check2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -88,6 +90,7 @@
                 android:textSize="14sp"
                 android:text="Data Currency" />
             <CheckBox
+                android:id="@+id/check3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -96,6 +99,7 @@
                 android:textSize="14sp"
                 android:text="Data Debtor" />
             <CheckBox
+                android:id="@+id/check4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -104,6 +108,7 @@
                 android:textSize="14sp"
                 android:text="Data Item" />
             <CheckBox
+                android:id="@+id/check5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -112,6 +117,7 @@
                 android:textSize="14sp"
                 android:text="Data Item Price" />
             <CheckBox
+                android:id="@+id/check6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -120,6 +126,7 @@
                 android:textSize="14sp"
                 android:text="Data Item UOM" />
             <CheckBox
+                android:id="@+id/check7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

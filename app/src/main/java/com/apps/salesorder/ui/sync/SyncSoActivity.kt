@@ -72,7 +72,7 @@ class SyncSoActivity : AppCompatActivity() {
 
 
         //dataHeader.addAll(SoHeaderDao.getNotSync("sync"))
-        dataHeader.addAll(SoHeaderDao.getAll())
+        dataHeader.addAll(SoHeaderDao.getByNotStatus("draft"))
 
         Timber.e("[DATA LIST-ITEM] ${dataHeader.size}")
         if (dataHeader.size > 0){
@@ -101,32 +101,35 @@ class SyncSoActivity : AppCompatActivity() {
         val json: String = gson.toJson(soSync)
 
         Timber.e("JSON = $json ")
+        if (json.equals("{\"so_detail\":[],\"so_header\":[]}")){
+            Toasty.info(this, "Silahkan select data dahulu !", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.soSyncProses(json)
 
-        viewModel.soSyncProses(json)
+            viewModel.syncSoResp.observe(this, Observer {
+                when(it){
+                    is Resource.Loading -> {
+                        LoadingScreen.displayLoadingWithText(this,"Silahkan Tunggu..",false)
+                    }
+                    is Resource.Success -> {
+                        LoadingScreen.hideLoading()
+                        Timber.e("TAG ${it.data!!.data}")
 
-        viewModel.syncSoResp.observe(this, Observer {
-            when(it){
-                is Resource.Loading -> {
-                    LoadingScreen.displayLoadingWithText(this,"Silahkan Tunggu..",false)
+                        SoHeaderDao.updateCheckedHeaderAll("ya","sync")
+                        SoDetailDao.updateCheckedDetailAll("ya","sync")
+
+                        Toasty.success(this, "Data SO berhasil di Syncron !", Toast.LENGTH_SHORT).show()
+                        finish();
+                        startActivity(getIntent());
+                    }
+                    is Resource.Error -> {
+                        LoadingScreen.hideLoading()
+                        Toast.makeText(this, "terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                is Resource.Success -> {
-                    LoadingScreen.hideLoading()
-                    Timber.e("TAG ${it.data!!.data}")
+            })
 
-                    SoHeaderDao.updateCheckedHeaderAll("ya","sync")
-                    SoDetailDao.updateCheckedDetailAll("ya","sync")
-
-                    Toasty.success(this, "Data SO berhasil di Syncron !", Toast.LENGTH_SHORT).show()
-                    finish();
-                    startActivity(getIntent());
-                }
-                is Resource.Error -> {
-                    LoadingScreen.hideLoading()
-                    Toast.makeText(this, "terjadi kesalahan", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
+        }
 
     }
 
@@ -141,6 +144,14 @@ class SyncSoActivity : AppCompatActivity() {
 
             }
         })
+
+        binding.selectall.setOnCheckedChangeListener { _, b ->
+            if (b){
+                dataAdapter.checkAll(true)
+            } else {
+                dataAdapter.checkAll(false)
+            }
+        }
 
         binding.rvData.apply {
             layoutManager = GridLayoutManager(context,1)

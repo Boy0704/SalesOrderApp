@@ -44,6 +44,7 @@ class SyncSoListAdapter(
     private lateinit var database: SoDB
     private lateinit var SoDetailDao: SoDetailDao
     private lateinit var SoHeaderDao: SoHeaderDao
+    private var isCheckAll: Boolean = false
 
     init {
         dataFilter = listData
@@ -66,13 +67,15 @@ class SyncSoListAdapter(
 
         val list = dataFilter[position]
 
-        if (list.status.equals("sync")){
-            holder.binding.soNoLast.visibility = View.VISIBLE
-            holder.binding.soNo.visibility = View.GONE
-            holder.binding.soNoLast.text = list.soNo
-        } else {
-            holder.binding.soNo.text = list.soNo
-        }
+        /* tidak di pakai */
+
+//        if (list.status.equals("sync")){
+//            holder.binding.soNoLast.visibility = View.VISIBLE
+//            holder.binding.soNo.visibility = View.GONE
+//            holder.binding.soNoLast.text = list.soNo
+//        } else {
+//            holder.binding.soNo.text = list.soNo
+//        }
 
         holder.binding.companyName.text = list.companyName
         holder.binding.tanggal.text = list.date
@@ -86,6 +89,15 @@ class SyncSoListAdapter(
         holder.binding.subtotal.text = Utils.NUMBER.currencyFormat(if (list.subTotal?.isEmpty() == true) "0" else list.subTotal.toString())
         holder.binding.total.text = Utils.NUMBER.currencyFormat(if (list.total?.isEmpty() == true) "0" else list.total.toString())
 
+        if (isCheckAll){
+            holder.binding.soNo.isChecked = true
+            SoHeaderDao.updateCheckedAll("ya")
+            SoDetailDao.updateCheckedAll("ya")
+        } else {
+            holder.binding.soNo.isChecked = false
+            SoHeaderDao.updateCheckedAll("tidak")
+            SoDetailDao.updateCheckedAll("tidak")
+        }
 
         holder.binding.btnDetail.setOnClickListener {
             val intent = Intent(holder.binding.mainLayout.context, OrderDetailActivity::class.java)
@@ -148,6 +160,12 @@ class SyncSoListAdapter(
             listener.onClick( list )
         }
 
+    }
+
+    public fun checkAll(value: Boolean){
+        isCheckAll = value
+        Timber.e("CHECK ALL SO SYNC : $isCheckAll");
+        notifyDataSetChanged()
     }
 
     class ViewHolder(val binding: ItemListSoSyncBinding): RecyclerView.ViewHolder(binding.root)

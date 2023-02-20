@@ -15,7 +15,7 @@ interface SoHeaderDao {
     @Delete
     fun delete(sh: SoHeader)
 
-    @Query("UPDATE so_header SET subtotal=:subtotal, taxable_amount=:taxableAmount, ppn=:ppn, currency_code=:currencyCode, rate=:rate, local_total=:localTotal, total=:total, status=:status WHERE so_no = :soNo")
+    @Query("UPDATE so_header SET subtotal=:subtotal, taxable_amount=:taxableAmount, ppn=:ppn, currency_code=:currencyCode, rate=:rate, local_total=:localTotal, total=:total, dibayar=:dibayar, status=:status WHERE so_no = :soNo")
     fun updateHeader(soNo: String,
                      subtotal: String,
                      taxableAmount: String,
@@ -24,8 +24,12 @@ interface SoHeaderDao {
                      rate: String,
                      localTotal: String,
                      total: String,
-                     status: String
+                     status: String,
+                     dibayar: String
     )
+
+    @Query("UPDATE so_header SET checked=:checked")
+    fun updateCheckedAll(checked: String)
 
     @Query("UPDATE so_header SET checked=:checked WHERE so_no = :soNo")
     fun updateCheckedHeader(checked: String,soNo: String)
@@ -35,6 +39,9 @@ interface SoHeaderDao {
 
     @Query("SELECT * FROM so_header")
     fun getAll() : List<SoHeader>
+
+    @Query("SELECT * FROM so_header WHERE status != :status")
+    fun getByNotStatus(status: String) : List<SoHeader>
 
     @Query("SELECT count(so_no) FROM so_header")
     fun getCount() : Int

@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/spacing_middle"
                     android:layout_marginRight="@dimen/spacing_middle"
-                    android:text="SO/220712/0001"
+                    android:text="SO/220712/0001 | Submit | 10 - Item "
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black" />
 

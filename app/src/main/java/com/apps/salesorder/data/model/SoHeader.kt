@@ -28,6 +28,7 @@ data class SoHeader(
     @ColumnInfo(name = "rate") var rate: String? = "",
     @ColumnInfo(name = "local_total") var localTotal: String? = "",
     @ColumnInfo(name = "total") var total: String? = "",
+    @ColumnInfo(name = "dibayar") var dibayar: String? = "",
     @ColumnInfo(name = "status") var status: String? = "",
     @ColumnInfo(name = "created_at") var createdAt: String? = "",
     @ColumnInfo(name = "created_by") var createdBy: String? = "",

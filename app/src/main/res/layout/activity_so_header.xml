@@ -45,7 +45,7 @@
                     android:layout_height="match_parent"
                     android:textSize="20sp"
                     android:gravity="center_vertical"
-                    android:text="Order Header"
+                    android:text="Sales Header"
                     style="@style/TextView.BalooWhite"/>
             </LinearLayout>
 

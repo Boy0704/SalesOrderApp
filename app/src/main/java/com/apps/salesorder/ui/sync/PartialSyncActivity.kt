@@ -59,10 +59,29 @@ class PartialSyncActivity : AppCompatActivity() {
 
 
         binding.BtnSync.setOnClickListener {
-            checkNetwork()
-            //LoadingScreen.displayLoadingWithText(requireActivity(),"Silahkan Tunggu, Sedang mendownload data..",true)
-            LoadingScreen.displayLoadingWithText(this, "Sedang Download Data..", false)
-            downloadData()
+
+            if(
+                binding.check1.isChecked ||
+                binding.check2.isChecked ||
+                binding.check3.isChecked ||
+                binding.check4.isChecked ||
+                binding.check5.isChecked ||
+                binding.check6.isChecked ||
+                binding.check7.isChecked
+            ) {
+
+                checkNetwork()
+                //LoadingScreen.displayLoadingWithText(requireActivity(),"Silahkan Tunggu, Sedang mendownload data..",true)
+                LoadingScreen.displayLoadingWithText(this, "Sedang Download Data..", false)
+                downloadData()
+
+            } else {
+
+                Toasty.info(this, "Silahkan checklist data terlebih dahulu !", Toast.LENGTH_SHORT).show()
+
+            }
+
+
         }
         binding.icBack.setOnClickListener {
             finish()
