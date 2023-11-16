@@ -16,13 +16,11 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.apps.salesorder.R
 import com.apps.salesorder.data.db.SoDB
+import com.apps.salesorder.data.db.dao.CompanySettingDao
 import com.apps.salesorder.data.db.dao.ItemDao
 import com.apps.salesorder.data.db.dao.SoDetailDao
 import com.apps.salesorder.data.db.dao.SoHeaderDao
-import com.apps.salesorder.data.model.Branch
-import com.apps.salesorder.data.model.Debtor
-import com.apps.salesorder.data.model.SoDetail
-import com.apps.salesorder.data.model.SoHeader
+import com.apps.salesorder.data.model.*
 import com.apps.salesorder.databinding.ItemListDuaBinding
 import com.apps.salesorder.databinding.ItemListSoBinding
 import com.apps.salesorder.helper.Utils
@@ -44,6 +42,7 @@ class SoListAdapter(
     private lateinit var database: SoDB
     private lateinit var SoDetailDao: SoDetailDao
     private lateinit var SoHeaderDao: SoHeaderDao
+    private lateinit var CompanySettingDao: CompanySettingDao
 
     init {
         dataFilter = listData
@@ -63,6 +62,7 @@ class SoListAdapter(
         database = SoDB.getDatabase(context)
         SoDetailDao = database.getSoDetail()
         SoHeaderDao = database.getSoHeader()
+        CompanySettingDao = database.getCompanySetting()
 
         val list = dataFilter[position]
 
@@ -112,9 +112,11 @@ class SoListAdapter(
                 //val pdfConverter = PDFConverter()
                 val xmlToPDFConverter = XmlToPDFConverter()
                 val listItemsSoDetail = arrayListOf<SoDetail>()
+                val setting = arrayListOf<CompanySetting>()
                 listItemsSoDetail.addAll(SoDetailDao.getBySoNo(list.soNo.toString()))
+                setting.addAll(CompanySettingDao.getAll())
                 //pdfConverter.createPdf(context, list, listItemsSoDetail, activity)
-                xmlToPDFConverter.createPdf(context, list, listItemsSoDetail)
+                xmlToPDFConverter.createPdf(context, list, listItemsSoDetail, setting)
             }
 
         }

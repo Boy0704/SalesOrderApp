@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.apps.salesorder.R
 import com.apps.salesorder.data.db.SoDB
+import com.apps.salesorder.data.db.dao.CompanySettingDao
 import com.apps.salesorder.data.db.dao.DebtorDao
 import com.apps.salesorder.data.db.dao.SoHeaderDao
 import com.apps.salesorder.data.model.Branch
@@ -55,6 +56,7 @@ class SoHeaderActivity : AppCompatActivity() {
     private lateinit var database: SoDB
     private lateinit var SoHeaderDao: SoHeaderDao
     private lateinit var DebtorDao: DebtorDao
+    private lateinit var CompanySettingDao: CompanySettingDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,7 @@ class SoHeaderActivity : AppCompatActivity() {
         database = SoDB.getDatabase(this)
         SoHeaderDao = database.getSoHeader()
         DebtorDao = database.getDebtorDao()
+        CompanySettingDao = database.getCompanySetting()
 
         val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LocalDateTime.now()
@@ -102,10 +105,12 @@ class SoHeaderActivity : AppCompatActivity() {
             showDialogCariBranch()
         }
         binding.simpan.setOnClickListener {
-
-            val d = Utils.DATE.convertDate(binding.tanggal.text.toString()).toString();
+            val formatSO = CompanySettingDao.getAll().get(0).format_so.toString().split("/")
+            val d = Utils.DATE.convertDate(binding.tanggal.text.toString(), formatSO[1]).toString();
             val count = SoHeaderDao.getCount() + 1
-            soNo = "SO/"+ d +"/"+ count
+            val formatNoUrut = "%0"+formatSO[2].length+"d"
+            val noUrut = String.format(formatNoUrut, count)
+            soNo = formatSO[0]+"/"+ d +"/"+ noUrut
             val companyName = DebtorDao.getCompName(accNo)
             date = binding.tanggal.text.toString()
             delivery1 = binding.delivery1.text.toString()

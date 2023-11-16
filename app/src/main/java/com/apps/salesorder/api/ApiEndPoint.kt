@@ -58,5 +58,10 @@ interface ApiEndPoint {
         @Header("Authorization") authorization : String,
     ): Response<TaxResp>
 
+    @GET("api/so/download_master_data/company_setting")
+    suspend fun companySetting(
+        @Header("Authorization") authorization : String,
+    ): Response<SettingResp>
+
 
 }

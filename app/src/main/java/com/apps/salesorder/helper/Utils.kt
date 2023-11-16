@@ -8,9 +8,9 @@ import java.util.*
 class Utils {
 
      object DATE{
-         fun convertDate(string: String?): String? {
+         fun convertDate(string: String?, formatDate: String): String? {
              val inputSDF = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-             val outputSDF = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+             val outputSDF = SimpleDateFormat(formatDate, Locale.getDefault())
              var date: Date? = null
              date = try {
                  //here you get Date object from string

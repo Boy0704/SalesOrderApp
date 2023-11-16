@@ -2,6 +2,8 @@ package com.apps.salesorder.ui.so.detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -76,6 +78,28 @@ class OrderDetailActivity : AppCompatActivity() {
 
         Timber.e("[DATA LIST-ITEM] ${listItems.size}")
 
+        binding.dibayar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+                // Do nothing before text changes
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+                // Do nothing on text changing
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                // Format the number and set it back to the EditText
+                if (!editable.isNullOrBlank()) {
+//                    val parsedNumber = numberFormat.format(editable.toString())
+//                    val formattedNumber = numberFormat.format(parsedNumber)
+//                    binding.dibayar.removeTextChangedListener(this) // Remove listener to avoid infinite loop
+//                    binding.dibayar.setText(formattedNumber)
+//                    binding.dibayar.setSelection(formattedNumber.length) // Move cursor to the end
+//                    binding.dibayar.addTextChangedListener(this) // Add the listener back
+                    binding.Lbldibayar.setText(Utils.NUMBER.currencyFormat( editable.toString() ))
+                }
+            }
+        })
 
         currencyCode = DebtorDao.getByAccNo(accNo).get(0).currencyCode.toString()
         rate = CurrencyDao.getByCurrencyCode(currencyCode).get(0).bankSellRate!!
@@ -100,6 +124,12 @@ class OrderDetailActivity : AppCompatActivity() {
         binding.ppn.setText(Utils.NUMBER.currencyFormat(ppn.toString()))
         binding.localTotal.setText(Utils.NUMBER.currencyFormat(localTotal.toString()))
         binding.total.setText(Utils.NUMBER.currencyFormat(total.toString()))
+        if (header.get(0).dibayar.toString().isEmpty()){
+            binding.Lbldibayar.setText(Utils.NUMBER.currencyFormat("0"))
+        } else {
+            binding.Lbldibayar.setText(Utils.NUMBER.currencyFormat(header.get(0).dibayar.toString()))
+        }
+        binding.dibayar.setText(header.get(0).dibayar)
     }
 
     private fun setuplisten() {
@@ -119,6 +149,13 @@ class OrderDetailActivity : AppCompatActivity() {
     }
 
     private fun submit(){
+        var dibayar: String = binding.dibayar.text.toString()
+//        if( dibayar.isEmpty() ){
+//            Toasty.warning(this, "Total Bayar tidak boleh kosong atau 0", Toast.LENGTH_SHORT).show()
+//        } else {
+//
+//        }
+
         SoHeaderDao.updateHeader(
             soNo,
             subtotal = allSubtotal.toString(),
@@ -128,11 +165,14 @@ class OrderDetailActivity : AppCompatActivity() {
             rate = rate,
             localTotal = localTotal.toString(),
             total = total.toString(),
+            dibayar = dibayar,
             status = "submit"
         )
         Toasty.success(this, "SO berhasil di submit", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
+
+
     }
 
     private fun setupAdapter(listItem: ArrayList<SoDetail>) {

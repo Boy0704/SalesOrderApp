@@ -2,6 +2,7 @@ package com.apps.salesorder.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -10,8 +11,9 @@ import com.apps.salesorder.databinding.ActivityHomeBinding
 import com.apps.salesorder.ui.profil.ProfilFragment
 import com.apps.salesorder.ui.so.list.ListSoFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tapadoo.alerter.Alerter
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), OnFragmentInteractionListener {
 
     private val binding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
 
@@ -70,6 +72,10 @@ class HomeActivity : AppCompatActivity() {
         } else {
             finish()
         }
+    }
+
+    override fun onRefreshActivity() {
+        recreate()
     }
 
 }

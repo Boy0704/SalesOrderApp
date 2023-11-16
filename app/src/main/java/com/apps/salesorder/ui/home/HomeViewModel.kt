@@ -22,6 +22,7 @@ class HomeViewModel (
     val itemUOMResp: MutableLiveData<Resource<ItemUomResp>> = MutableLiveData()
     val itemPriceResp: MutableLiveData<Resource<ItemPriceResp>> = MutableLiveData()
     val taxResp: MutableLiveData<Resource<TaxResp>> = MutableLiveData()
+    val settingResp: MutableLiveData<Resource<SettingResp>> = MutableLiveData()
 
     val syncSoResp: MutableLiveData<Resource<SyncSoResp>> = MutableLiveData()
 
@@ -206,6 +207,29 @@ class HomeViewModel (
                 taxResp.value = Resource.Error(context.getString(R.string.error_server))
             } else {
                 taxResp.value = Resource.Error( e.message.toString() )
+            }
+        }
+    }
+
+    fun getSetting(token: String) = viewModelScope.launch {
+        settingResp.value = Resource.Loading()
+        val dataApi = api.companySetting(authorization = token)
+        try {
+            if (dataApi.code() == 401) {
+                settingResp.value = Resource.Error("Token Unauthorized atau akun sedang tidak aktif!")
+            } else {
+                if (dataApi.body()!!.error.equals("false")) {
+                    settingResp.value = Resource.Success( dataApi.body()!! )
+                } else {
+                    settingResp.value = Resource.Error( dataApi.body()?.message.toString() )
+                }
+            }
+
+        } catch (e: Exception) {
+            if(dataApi.code() == 500) {
+                settingResp.value = Resource.Error(context.getString(R.string.error_server))
+            } else {
+                settingResp.value = Resource.Error( e.message.toString() )
             }
         }
     }

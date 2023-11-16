@@ -16,7 +16,8 @@ import com.apps.salesorder.data.model.*
     Item::class,
     ItemUom::class,
     ItemPrice::class,
-    Tax::class
+    Tax::class,
+    CompanySetting::class
                      ], version = 1, exportSchema = false )
 abstract class SoDB : RoomDatabase() {
 
@@ -49,5 +50,6 @@ abstract class SoDB : RoomDatabase() {
     abstract fun getItemUOMDao(): ItemUOMDao
     abstract fun getItemPriceDao(): ItemPriceDao
     abstract fun getTaxDao(): TaxDao
+    abstract fun getCompanySetting(): CompanySettingDao
 
 }

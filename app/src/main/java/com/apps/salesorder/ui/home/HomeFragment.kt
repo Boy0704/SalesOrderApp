@@ -47,8 +47,9 @@ class HomeFragment : Fragment() {
     private lateinit var SoHeaderDao: SoHeaderDao
     private lateinit var SoDetailDao: SoDetailDao
     private lateinit var TaxDao: TaxDao
+    private lateinit var CompanySettingDao: CompanySettingDao
     private var totalSync: Int = 0
-    private var limitSync: Int = 7
+    private var limitSync: Int = 8
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,12 +76,16 @@ class HomeFragment : Fragment() {
         TaxDao = database.getTaxDao()
         SoHeaderDao = database.getSoHeader()
         SoDetailDao = database.getSoDetail()
+        CompanySettingDao = database.getCompanySetting()
 
         viewModelFactory = HomeViewModelFactory( api, requireActivity() )
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
 
-        infoFullSync()
+        if(DebtorDao.getAll().size == 0){
+            infoFullSync()
+        }
+
         binding.fullSync.setOnClickListener {
 
             Alerter.create(requireActivity())
@@ -154,6 +159,7 @@ class HomeFragment : Fragment() {
         viewModel.getCurrency(token.toString())
         viewModel.getItem(token.toString(), SalesAgent.toString())
         viewModel.getItemUOM(token.toString())
+        viewModel.getSetting(token.toString())
 
 
 
@@ -412,6 +418,42 @@ class HomeFragment : Fragment() {
             }
         })
 
+        viewModel.settingResp.observe(viewLifecycleOwner, Observer {
+            when(it) {
+                is Resource.Loading -> {
+                    setNotif("download data Setting...")
+                }
+                is Resource.Success -> {
+                    Timber.e("TAG DOWNLOAD TABLE : ${it.data!!.data.table}")
+                    CompanySettingDao.deleteAll()
+                    var total = 1;
+                    while (total <= it.data.data.total_data ){
+                        var i = total - 1;
+                        CompanySettingDao.insert(
+                            CompanySetting(
+                                company_id = it.data.data.master_data[i].company_id,
+                                company_name = it.data.data.master_data[i].company_name,
+                                alamat = it.data.data.master_data[i].alamat,
+                                logo = it.data.data.master_data[i].logo,
+                                format_so = it.data.data.master_data[i].format_so,
+                                next_so = it.data.data.master_data[i].next_so
+                            )
+                        )
+                        total++;
+                        setNotif("download data ${it.data.data.table} : $total dari ${it.data.data.total_data} ")
+                    }
+
+                    setNotif("Done download : ${it.data.data.table}")
+                    totalSync++;
+                    checkIsLimitSync(totalSync)
+                }
+                is Resource.Error -> {
+                    setNotif(it.message.toString())
+                    Toast.makeText(context, it.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
 
     }
 
@@ -420,6 +462,22 @@ class HomeFragment : Fragment() {
         if (value.equals(limitSync)){
             setNotif("Sukses Melakukan Full Sync")
             LoadingScreen.hideLoading()
+
+            Alerter.create(requireActivity())
+                .setDuration(60*1000)
+                .setTitle("Notif")
+                .setText("Sukses Melakukan Full Sync !")
+                .addButton("Oke", R.style.AlertButton, View.OnClickListener {
+                    val listener = activity as OnFragmentInteractionListener
+                    listener.onRefreshActivity()
+
+                })
+
+                .show()
+
+
+
+
         }
     }
 

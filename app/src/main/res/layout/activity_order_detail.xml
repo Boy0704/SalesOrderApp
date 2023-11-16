@@ -603,7 +603,76 @@
                 android:layout_height="1dp"
                 android:background="@color/gray" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Di Bayar"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
 
+                <View
+                    android:layout_width="@dimen/spacing_medium"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/Lbldibayar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="0"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_font"
+                    android:textStyle="bold"
+                    android:gravity="right"
+                    android:layout_weight="2"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="14dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/grey_font"
+                        android:text="Di Bayar"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_crimson"
+                        android:text=" *"/>
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/dibayar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginStart="24dp"
+                    android:hint="0"
+                    android:gravity="right"
+                    android:inputType="numberDecimal"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/submit"

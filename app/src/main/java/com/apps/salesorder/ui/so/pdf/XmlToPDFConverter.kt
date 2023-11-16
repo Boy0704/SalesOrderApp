@@ -26,6 +26,7 @@ import java.io.FileOutputStream
 import com.gkemon.XMLtoPDF.model.SuccessResponse
 
 import android.widget.Toast
+import com.apps.salesorder.data.model.CompanySetting
 
 import com.gkemon.XMLtoPDF.model.FailureResponse
 
@@ -42,32 +43,42 @@ class XmlToPDFConverter {
     fun createPdf(
         context: Context,
         soHeader: SoHeader,
-        soDetail: ArrayList<SoDetail>
+        soDetail: ArrayList<SoDetail>,
+        setting : ArrayList<CompanySetting>
     ) {
         val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.layout_pdf_page, null)
+        val view = inflater.inflate(R.layout.layout_pdf_page1, null)
 
         val dataAdapter = DetailPdfAdapter(soDetail,context)
 
-        val compCode = view.findViewById<TextView>(R.id.company_code)
-        val compName = view.findViewById<TextView>(R.id.company_name)
+        val comp = view.findViewById<TextView>(R.id.company_name)
+        val compName = view.findViewById<TextView>(R.id.header_label)
+        val salesname = view.findViewById<TextView>(R.id.salesman)
         val soNo = view.findViewById<TextView>(R.id.so_no)
-        val status = view.findViewById<TextView>(R.id.status)
+        //val status = view.findViewById<TextView>(R.id.status)
         val allQty = view.findViewById<TextView>(R.id.all_qty)
-        val allSubtotal = view.findViewById<TextView>(R.id.all_subtotal)
-        val allPPNAmount = view.findViewById<TextView>(R.id.all_ppn_amount)
-        val subtotalEx = view.findViewById<TextView>(R.id.subtotal_ex)
-        val taxableAmount = view.findViewById<TextView>(R.id.taxable_amount)
-        val ppn = view.findViewById<TextView>(R.id.ppn)
-        val currency = view.findViewById<TextView>(R.id.currency)
-        val rate = view.findViewById<TextView>(R.id.rate)
-        val localTotal = view.findViewById<TextView>(R.id.local_total)
+//        val allSubtotal = view.findViewById<TextView>(R.id.all_subtotal)
+//        val allPPNAmount = view.findViewById<TextView>(R.id.all_ppn_amount)
+//        val subtotalEx = view.findViewById<TextView>(R.id.subtotal_ex)
+//        val taxableAmount = view.findViewById<TextView>(R.id.taxable_amount)
+//        val ppn = view.findViewById<TextView>(R.id.ppn)
+//        val currency = view.findViewById<TextView>(R.id.currency)
+//        val rate = view.findViewById<TextView>(R.id.rate)
+//        val localTotal = view.findViewById<TextView>(R.id.local_total)
         val total = view.findViewById<TextView>(R.id.total)
+        val ppn = view.findViewById<TextView>(R.id.ppn)
+        val diskon = view.findViewById<TextView>(R.id.diskon)
+        val nettotal = view.findViewById<TextView>(R.id.nettotal)
+        val dibayar = view.findViewById<TextView>(R.id.dibayar)
+        val sisaBayar = view.findViewById<TextView>(R.id.sisa_bayar)
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvData)
-        compCode.text = soHeader.accNo
-        compName.text = soHeader.companyName
+        //compCode.text = soHeader.accNo
+        comp.text = soHeader.companyName
+        compName.text = setting[0].company_name
+        salesname.text = soHeader.salesAgent
         soNo.text = soHeader.soNo
-        status.text = soHeader.status
+        dibayar.text = Utils.NUMBER.currencyFormat(soHeader.dibayar.toString())
+        //status.text = soHeader.status
 
         var qty = 0;
         var ppnAmount: Double = 0.0;
@@ -78,21 +89,26 @@ class XmlToPDFConverter {
 
 
         allQty.text = qty.toString()
-        allSubtotal.text = Utils.NUMBER.currencyFormat(soHeader.subTotal.toString())
-        allPPNAmount.text = Utils.NUMBER.currencyFormat(ppnAmount.toString())
-        subtotalEx.text = Utils.NUMBER.currencyFormat(soHeader.subTotal.toString())
-        taxableAmount.text = Utils.NUMBER.currencyFormat(soHeader.taxableAmount.toString())
-        ppn.text = Utils.NUMBER.currencyFormat(soHeader.ppn.toString())
-        currency.text = soHeader.currencyCode.toString()
-        rate.text = soHeader.rate.toString()
-        localTotal.text = Utils.NUMBER.currencyFormat(soHeader.localTotal.toString())
+//        allSubtotal.text = Utils.NUMBER.currencyFormat(soHeader.subTotal.toString())
+//        allPPNAmount.text = Utils.NUMBER.currencyFormat(ppnAmount.toString())
+//        subtotalEx.text = Utils.NUMBER.currencyFormat(soHeader.subTotal.toString())
+//        taxableAmount.text = Utils.NUMBER.currencyFormat(soHeader.taxableAmount.toString())
+//        ppn.text = Utils.NUMBER.currencyFormat(soHeader.ppn.toString())
+//        currency.text = soHeader.currencyCode.toString()
+//        rate.text = soHeader.rate.toString()
+//        localTotal.text = Utils.NUMBER.currencyFormat(soHeader.localTotal.toString())
         total.text = Utils.NUMBER.currencyFormat(soHeader.total.toString())
+        ppn.text = Utils.NUMBER.currencyFormat(ppnAmount.toString())
+        diskon.text = Utils.NUMBER.currencyFormat(soHeader.ppn.toString())
+        nettotal.text = Utils.NUMBER.currencyFormat(soHeader.localTotal.toString())
+        var hasilsisabayar = soHeader.localTotal!!.toString().toDouble() - soHeader.dibayar!!.toString().toDouble()
+        sisaBayar.text = Utils.NUMBER.currencyFormat(hasilsisabayar.toString())
 
         recyclerView.adapter = dataAdapter
-        generatePdf(context, view)
+        generatePdf(context, view, soHeader.salesAgent+"-"+soHeader.soNo)
     }
 
-    fun generatePdf(context: Context, finalInvoiceViewToPrint: View) {
+    fun generatePdf(context: Context, finalInvoiceViewToPrint: View, nameFile: String) {
         PdfGenerator.getBuilder()
             .setContext(context)
             .fromViewSource()
@@ -100,7 +116,7 @@ class XmlToPDFConverter {
                  * You can also invoke "fromLayoutXMLList()" method here which takes list of layout resources instead of array. */
             .setDefaultPageSize(PdfGenerator.PageSize.A5) /* It takes default page size like A4,A5. You can also set custom page size in pixel
                  * by calling ".setCustomPageSize(int widthInPX, int heightInPX)" here. */
-            .setFileName("so-invoice") /* It is file name */
+            .setFileName(nameFile.replace("/","")) /* It is file name */
             .setFolderName("so-invoice-folder/") /* It is folder name. If you set the folder name like this pattern (FolderA/FolderB/FolderC), then
                  * FolderA creates first.Then FolderB inside FolderB and also FolderC inside the FolderB and finally
                  * the pdf file named "Test-PDF.pdf" will be store inside the FolderB. */

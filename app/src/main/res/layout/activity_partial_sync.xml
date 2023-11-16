@@ -135,6 +135,16 @@
                 android:textSize="14sp"
                 android:text="Data Tax" />
 
+            <CheckBox
+                android:id="@+id/check8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="14sp"
+                android:text="Data Setting" />
+
             <Button
                 android:id="@+id/BtnSync"
                 android:layout_width="match_parent"

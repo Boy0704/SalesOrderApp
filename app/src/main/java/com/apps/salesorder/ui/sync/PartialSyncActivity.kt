@@ -2,6 +2,7 @@ package com.apps.salesorder.ui.sync
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,8 @@ import com.apps.salesorder.databinding.ActivityPartialSyncBinding
 import com.apps.salesorder.helper.LoadingScreen
 import com.apps.salesorder.ui.home.HomeViewModel
 import com.apps.salesorder.ui.home.HomeViewModelFactory
+import com.apps.salesorder.ui.home.OnFragmentInteractionListener
+import com.tapadoo.alerter.Alerter
 import com.wessam.library.NetworkChecker
 import com.wessam.library.NoInternetLayout
 import es.dmoral.toasty.Toasty
@@ -376,7 +379,16 @@ class PartialSyncActivity : AppCompatActivity() {
         if (value.equals(limitSync)){
             setNotif("Sukses Melakukan Partial Sync")
             LoadingScreen.hideLoading()
-            Toasty.success(this, "Berhasil melakukan Partial Syncron !", Toast.LENGTH_SHORT).show()
+            Alerter.create(this)
+                .setDuration(60*1000)
+                .setTitle("Notif")
+                .setText("Berhasil melakukan Partial Syncron !")
+                .addButton("Oke", R.style.AlertButton, View.OnClickListener {
+                    recreate()
+
+                })
+
+                .show()
 
         }
     }
