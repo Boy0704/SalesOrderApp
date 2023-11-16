@@ -26,7 +26,7 @@ class LoginViewModel (
                 if (dataApi.body()!!.error.equals("true")) {
                     loginResponse.value = Resource.Success( dataApi.body()!! )
                 } else {
-                    loginResponse.value = Resource.Error( dataApi.body()?.message.toString() )
+                    loginResponse.value = Resource.Error( "error", dataApi.body()!! )
                 }
             }
 

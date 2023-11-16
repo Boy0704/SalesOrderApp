@@ -290,7 +290,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Jml. Barang"
+                    android:text="Total Qty"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -324,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/black"
-                    android:text="Total"
+                    android:text="Total Harga"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_weight="1"/>

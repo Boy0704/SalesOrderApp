@@ -77,7 +77,12 @@ class XmlToPDFConverter {
         compName.text = setting[0].company_name
         salesname.text = soHeader.salesAgent
         soNo.text = soHeader.soNo
-        dibayar.text = Utils.NUMBER.currencyFormat(soHeader.dibayar.toString())
+        if (soHeader.dibayar.toString() == null){
+            dibayar.text = Utils.NUMBER.currencyFormat("0")
+        } else {
+            dibayar.text = Utils.NUMBER.currencyFormat(soHeader.dibayar.toString())
+        }
+
         //status.text = soHeader.status
 
         var qty = 0;
@@ -97,7 +102,7 @@ class XmlToPDFConverter {
 //        currency.text = soHeader.currencyCode.toString()
 //        rate.text = soHeader.rate.toString()
 //        localTotal.text = Utils.NUMBER.currencyFormat(soHeader.localTotal.toString())
-        total.text = Utils.NUMBER.currencyFormat(soHeader.total.toString())
+        total.text = Utils.NUMBER.currencyFormat(soHeader.subTotal.toString())
         ppn.text = Utils.NUMBER.currencyFormat(ppnAmount.toString())
         diskon.text = Utils.NUMBER.currencyFormat(soHeader.ppn.toString())
         nettotal.text = Utils.NUMBER.currencyFormat(soHeader.localTotal.toString())

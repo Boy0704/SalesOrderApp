@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Resource.Error -> {
                     LoadingScreen.hideLoading()
-                    Toast.makeText(this, "gagal login", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, it.data!!.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })
