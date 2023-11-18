@@ -3,7 +3,8 @@ package com.apps.salesorder.helper
 import java.text.DecimalFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class Utils {
 
@@ -29,5 +30,4 @@ class Utils {
             return formatter.format(amount.toDouble())
         }
     }
-
 }

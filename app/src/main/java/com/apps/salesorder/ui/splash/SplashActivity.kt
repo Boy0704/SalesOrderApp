@@ -2,9 +2,12 @@ package com.apps.salesorder.ui.splash
 
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.apps.salesorder.data.constants.Constants
@@ -15,6 +18,7 @@ import com.apps.salesorder.ui.auth.UrlActivity
 import com.apps.salesorder.ui.home.HomeActivity
 import io.sentry.Sentry
 import timber.log.Timber
+
 
 class SplashActivity : AppCompatActivity() {
 
@@ -32,6 +36,10 @@ class SplashActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
         window.statusBarColor = Color.TRANSPARENT
+
+        val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+        Timber.e("IMEI : $androidId")
 
         val pref = Preferences(this)
         token = pref.getString(Constants.DEFAULT.TOKEN).toString()

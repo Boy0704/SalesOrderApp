@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewModel : LoginViewModel
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
     private lateinit var sheenValidator: SheenValidator
+    private var androidId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,10 +52,10 @@ class LoginActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModelFactory = LoginViewModelFactory( api, this )
         viewModel = ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
-
+        androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         sheenValidator = SheenValidator(this)
         sheenValidator.setOnValidatorListener {
-            viewModel.loginProses(binding.etUsername.text.toString(),binding.etPassword.text.toString())
+            viewModel.loginProses(binding.etUsername.text.toString(),binding.etPassword.text.toString(), androidId)
         }
         sheenValidator.registerAsRequired(binding.etUsername)
         sheenValidator.registerAsRequired(binding.etPassword)
@@ -77,10 +79,12 @@ class LoginActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     LoadingScreen.hideLoading()
                     Timber.e("TAG ${it.data!!.data}")
+                    androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
                     Toast.makeText(this, "Berhasil login", Toast.LENGTH_SHORT).show()
                     pref.put(Constants.DEFAULT.TOKEN, it.data.data[0].token)
                     pref.put(Constants.DEFAULT.USERNAME,binding.etUsername.text.trim().toString())
                     pref.put(Constants.DEFAULT.NAMA, it.data.data[0].nama_lengkap)
+                    pref.put(Constants.DEFAULT.ANDROID_ID, androidId)
 
                     val current = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         LocalDateTime.now()

@@ -23,6 +23,7 @@ class Constants {
         const val FOTO = "selfie_user"
         const val SIM = "sim_user"
         const val LOGIN_NEW = "login_new"
+        const val ANDROID_ID =  "android_id_user"
     }
 
     object INTENT {

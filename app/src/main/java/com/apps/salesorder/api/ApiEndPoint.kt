@@ -13,6 +13,13 @@ interface ApiEndPoint {
     suspend fun login(
         @Field("username") username: String?,
         @Field("password") password: String?,
+        @Field("android_id") androidId: String?,
+    ): Response<LoginResp>
+
+    @FormUrlEncoded
+    @POST("api/so/logout")
+    suspend fun logout(
+        @Field("android_id") androidId: String?,
     ): Response<LoginResp>
 
     @FormUrlEncoded
