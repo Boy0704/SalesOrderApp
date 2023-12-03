@@ -77,6 +77,7 @@ class SyncSoListAdapter(
 //            holder.binding.soNo.text = list.soNo
 //        }
 
+        holder.binding.soNo.text = list.soNo
         holder.binding.companyName.text = list.companyName
         holder.binding.tanggal.text = list.date
         holder.binding.status.text = list.status
